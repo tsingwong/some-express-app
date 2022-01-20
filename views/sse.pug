@@ -16,6 +16,7 @@ block content
       }, false)
 
       source.addEventListener("my_msg", e => {
+        console.log(e)
         const data = JSON.parse(e.data)
         const msg = data.st + " : " + decodeURIComponent(data.msg)
         insertMsg("sse", msg)

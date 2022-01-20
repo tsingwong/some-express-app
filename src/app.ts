@@ -3,10 +3,11 @@
  * @Author: Tsingwong
  * @Date: 2022-01-18 19:25:03
  * @LastEditors: Tsingwong
- * @LastEditTime: 2022-01-20 18:03:45
+ * @LastEditTime: 2022-01-20 22:32:16
  */
 import express from "express"
 import path from "path"
+import http from "http"
 
 import * as sendDataController from "./controllers/sendData"
 import * as apiController from "./controllers/api"
@@ -33,6 +34,7 @@ app.get("/polling", sendDataController.pollingPage)
 app.get("/longPolling", sendDataController.longPollingPage)
 app.get("/iframe", sendDataController.iframePage)
 app.get("/sse", sendDataController.ssePage)
+app.get("/ws", sendDataController.websocketPage)
 // api
 app.post("/post", sendDataController.postApi)
 app.post("/polling", sendDataController.pollingApi)

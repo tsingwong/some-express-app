@@ -3,7 +3,7 @@
  * @Author: Tsingwong
  * @Date: 2022-01-19 19:20:45
  * @LastEditors: Tsingwong
- * @LastEditTime: 2022-01-20 19:31:57
+ * @LastEditTime: 2022-01-20 22:31:45
  */
 import { Request, Response } from "express"
 import { EventEmitter } from "events"
@@ -12,8 +12,8 @@ interface SendDataType {
   msg: string
   st: string
 }
-const EVENT = new EventEmitter()
-const MSG_POST = Symbol("msg_post")
+export const EVENT = new EventEmitter()
+export const MSG_POST = Symbol("msg_post")
 const MSG_TO_SEND: Array<SendDataType> = []
 
 export const index = (req: Request, res: Response) => {
@@ -94,10 +94,9 @@ export const ssePage = (req: Request, res: Response) => {
 
 export const sseApi = (req: Request, res: Response) => {
   const sseSend = (data: any) => {
-    res.write(`retry:10000
-    event:my_msg
-    data:${JSON.stringify(data)}
-    `)
+    res.write("1retry:10000\n")
+    res.write("event:my_msg\n")
+    res.write(`data:${JSON.stringify(data)}\n\n`)
   }
   res.set("Content-Type", "text/event-stream")
   res.set("Cache-Control", "no-cache")
@@ -105,14 +104,19 @@ export const sseApi = (req: Request, res: Response) => {
 
   res.statusCode = 200
 
-  res.write(`retry:10000
-  event:my_msg
-  `)
+  res.write("retry:10000\n")
+  res.write("event:my_msg\n\n")
 
   EVENT.addListener(MSG_POST, sseSend)
 
   req.socket.on("close", () => {
     console.log("sse socket close")
     EVENT.removeListener(MSG_POST, sseSend)
+  })
+}
+
+export const websocketPage = (req: Request, res: Response) => {
+  res.render("websocket", {
+    title: "websocket",
   })
 }

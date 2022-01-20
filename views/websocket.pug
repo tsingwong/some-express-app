@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1  #{title}
+  ul(id="websocket")
+  script(src="/js/util.js")
+  script.
+    (function () {
+      const {tinyevent, insertMsg, fetchMsg} = window.utils
+
+      let ws = new WebSocket("ws://127.0.0.1:3000")
+
+      ws.open = () => {
+        console.log("open websocket")
+      }
+
+      ws.onmessage = e => {
+        const data = JSON.parse(e.data)
+        const msg = data.st + ' : ' + decodeURIComponent(data.msg)
+        insertMsg("websocket", msg)
+      }
+    })()
