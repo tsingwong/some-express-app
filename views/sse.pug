@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1  #{title}
+  ul(id="sse")
+  script(src="/js/util.js")
+  script.
+    (function () {
+      const {tinyevent, insertMsg, fetchMsg} = window.utils
+
+      const source = new EventSource("/sseApi")
+
+      source.addEventListener("open", e => {
+        console.log("open sse")
+        console.log(e)
+      }, false)
+
+      source.addEventListener("my_msg", e => {
+        const data = JSON.parse(e.data)
+        const msg = data.st + " : " + decodeURIComponent(data.msg)
+        insertMsg("sse", msg)
+      }, false)
+
+      source.addEventListener("error", e => {
+        console.log("error")
+        console.log(e)
+      }, false)
+    })()

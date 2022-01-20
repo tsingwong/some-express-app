@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1  #{title}
+  ul(id="longPolling")
+  script(src="/js/util.js")
+  script.
+    (function () {
+      let MSG = "msg"
+      const {tinyevent, insertMsg, fetchMsg} = window.utils
+
+      async function query(){
+        try {
+          list = await fetchMsg('/longPolling')
+          tinyevent.trigger(MSG, {data:list, status: 0})
+        } catch(err) {
+          tinyevent.trigger(MSG, {data: err,status: -1});
+        }
+      }
+      tinyevent.on(MSG, result => {
+        console.log(result)
+        if (result.status === 0) {
+          let data = result.data
+          let msg = data.st + " : " + decodeURIComponent(data.msg)
+          insertMsg('longPolling', msg)
+        }
+        // 再次触发
+        query()
+      })
+      query()
+    })()

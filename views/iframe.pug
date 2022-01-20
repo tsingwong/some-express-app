@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1  #{title}
+  ul(id="iframe")
+  script(src="/js/util.js")
+  script.
+    const {insertMsg} = window.utils
+
+    function showMsg(data) {
+      const msg = data.st + " : " + decodeURIComponent(data.msg)
+      insertMsg("iframe", msg)
+    }
+
+    var iframe = document.createElement("iframe")
+    iframe.style ="display: none"
+    iframe.src = "/iframeApi"
+    document.body.append(iframe)

@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1  #{title}
+  ul(id="polling")
+  script(src="/js/util.js")
+  script.
+    (function () {
+      let INTERVAL_TIME = 5000
+      let LOADED = "loaded"
+      const {tinyevent, insertMsg, fetchMsg} = window.utils
+
+      async function polling(){
+        try {
+          list = await fetchMsg('/polling', {timeout: 3000})
+          list.forEach(ele => {
+            let msg = ele.st + " : " + decodeURIComponent(ele.msg)
+            insertMsg("polling", msg)
+          })
+        } catch(err) {
+          console.log(err)
+        }
+        setTimeout(() => {
+          tinyevent.trigger(LOADED)
+        }, INTERVAL_TIME)
+      }
+
+      async function intervalPolling() {
+        tinyevent.on(LOADED, async ()=> {
+          await polling()
+        })
+        await polling()
+      }
+      intervalPolling()
+    })()

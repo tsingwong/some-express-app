@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  style
+    include css/sendData.css
+  main
+    section
+      iframe(src="/post", frameborder="0")
+    section
+      iframe(src="/polling", frameborder="0")
+    section
+      iframe(src="/longPolling", frameborder="0")
+    section
+      iframe(src="/iframe", frameborder="0")
+    section
+      iframe(src="/sse", frameborder="0")

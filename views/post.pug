@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  form(action="/post" method="POST")
+    input(type="text" name="msg" placeholder="请输入要发送的内容")
+    input(type="submit" value="submit")
