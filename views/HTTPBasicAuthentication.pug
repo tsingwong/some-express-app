@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h1  #{title}
+  p#tips 尚未登录
+  script.
+    (function() {
+      let tips = document.getElementById("tips")
+
+      async function query (url, data) {
+        try {
+          let response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data)
+          })
+          return response.json()
+        }catch(e) {
+          console.log(e)
+        }
+      }
+      query('/HTTPBasicAuthentication', {}).then(
+        data => {
+          if (data.code !== 0) {
+            alert(data.msg)
+          }else {
+            tips.innerHTML = data.username
+          }
+        }
+      )
+    })()
