@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  p 当前已登录账号 #{userInfo.username}
+  button#logout 退出登录
+  script.
+    (function() {
+      let logoutBtn = document.getElementById("logout")
+
+      async function query(url, data) {
+        try {
+          let response = await fetch(url, {
+            method:"POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })
+          return response.json()
+        }catch(e) {
+          console.log(e)
+        }
+      }
+      logoutBtn.addEventListener("click", async (e) => {
+        let data = await query('/logout', {
+        })
+
+        if (data.code !== 0) {
+          alert(data.msg)
+        } else {
+          alert(data.msg)
+        }
+      })
+    })()

@@ -1,0 +1,54 @@
+extends layout
+
+block content
+  h1  #{title}
+  div#content
+    input#user(type="text" placeholder="用户名")
+    input#password(type="text" placeholder="密码")
+    button#submit 注册
+
+  script.
+    (function() {
+      let submitElement = document.getElementById("submit")
+      let userElement = document.getElementById("user")
+      let passwordElement = document.getElementById("password")
+
+      async function query (url, data) {
+        try {
+          let response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              //- "Accept":"application/json",
+              "Content-Type": "application/json"
+            }
+          })
+          return response.json()
+        }catch(e) {
+          console.log(e)
+        }
+      }
+
+      submitElement.addEventListener("click", (e) => {
+
+        query('/register', {
+          username: userElement.value,
+          password: passwordElement.value
+        }).then(
+          data => {
+            if (data.code !== 0) {
+              alert(data.msg)
+            }else {
+              let div = document.createElement('div')
+              div.innerHTML = "<a href='/cookie'>点击跳转， 三秒钟后自动跳转</a>"
+              document.body.append(div)
+              setTimeout(() => {
+                window.location.href ="cookie"
+              }, 3000)
+            }
+          }
+        )
+      })
+
+
+    })()
